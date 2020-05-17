@@ -57,13 +57,17 @@ def second_pass( commands, num_frames ):
     frames = [ {} for i in range(int(num_frames)) ]
     for command in commands:
         if command['op'] == 'vary':
-            i = int(command['args'][0])
-            while i <= command['args'][1]:
-                val = (i - command['args'][0]) / (command['args'][1] - command['args'][0])
-                val = (command['args'][3] - command['args'][2]) * val
-                val = command['args'][2] + val
-                frames[i][command['knob']] = val
+            i = 0
+            while i < len(frames):
+                if command['knob'] not in frames[i]:
+                    frames[i][command['knob']] = 1
+                if i >= command['args'][0] and i <= command['args'][1]:
+                    val = (i - command['args'][0]) / (command['args'][1] - command['args'][0])
+                    val = (command['args'][3] - command['args'][2]) * val
+                    val = command['args'][2] + val
+                    frames[i][command['knob']] = val
                 i += 1
+    #print(frames)
     return frames
 
 def numConv(num):
